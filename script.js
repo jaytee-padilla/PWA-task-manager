@@ -1,1 +1,3 @@
 openIDB();
+
+testTransaction();

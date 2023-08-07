@@ -114,10 +114,32 @@ const openIDB = () => {
   };
 
   taskDbRequest.onsuccess = (event) => {
-    const db = event.target.result;
+    dbConnection = event.target.result;
 
     console.info('Successful database connection');
 
-    renderData(getAllTasks(db));
+    renderData(getAllTasks(dbConnection));
   };
 };
+
+const testTransaction = () => {
+  // open database connection
+  const taskDbRequest = window.indexedDB.open('TaskDB', 1);
+
+  taskDbRequest.onerror = () => {
+    console.error('Error loading database');
+  };
+
+  taskDbRequest.onsuccess = (event) => {
+    const db = event.target.result;
+
+    // Start a transaction and make a request to do some database operation, like adding or retrieving data.
+    const req = db.transaction('taskStore', 'readonly').objectStore('taskStore').getAll();
+
+    // Wait for the operation to complete by listening to the right kind of DOM event.
+    req.onsuccess = (event) => {
+      // Do something with the results (which can be found on the request object)
+      console.log(event.target.result);
+    }
+  }
+}

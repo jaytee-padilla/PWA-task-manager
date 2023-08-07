@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="./index.css" />
+    <title>PWA Task Manager</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="is-size-1 is-size-3-mobile has-text-centered">
+        PWA Task Manager
+      </h1>
+
+      <div class="section">
+        <form>
+          <div class="field">
+            <div class="control">
+              <textarea
+                class="textarea is-medium is-primary"
+                placeholder="Enter Task Here"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="field is-grouped is-grouped-centered">
+            <div class="control">
+              <button class="button is-link">Add Task</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="section">
+        <ul id="task-list"></ul>
+      </div>
+    </div>
+
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <script src="./script.js"></script>
+  </body>
+</html>

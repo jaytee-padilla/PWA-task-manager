@@ -13,3 +13,10 @@ input[type=checkbox] {
   width: 20px;
   height: 20px;
 }
+
+.delete-btn {
+  cursor: pointer;
+  /* This also enables the delete button's encompassing span to react to event listeners.
+  Hopefully this doesn't get in the way of anything else */
+  pointer-events: auto !important;
+}

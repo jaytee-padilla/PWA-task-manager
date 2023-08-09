@@ -21,6 +21,18 @@ const addTaskSeedData = (db) => {
   });
 };
 
+const addDeleteEvents = () => {
+  const deleteBtnEls = document.querySelectorAll('.delete-btn');
+
+  deleteBtnEls.forEach((deleteBtn) => {
+    deleteBtn.addEventListener('click', (event) => {
+      const taskToDelete = event.target.closest('li').dataset.taskId;
+
+      deleteTask(taskToDelete);
+    });
+  });
+};
+
 const getAllTasks = (db) => {
   return (request = db
     .transaction('taskStore', 'readonly')
@@ -32,18 +44,22 @@ const renderData = (req) => {
   req.onsuccess = (event) => {
     const db = event.target.result;
 
+    // clear whatever's currently in the taskListEl
+    taskListEl.textContent = '';
+
     db.forEach((currentTask) => {
       const liEl = document.createElement('li');
+      liEl.setAttribute('data-task-id', currentTask.id);
 
       liEl.innerHTML = `
-    <div class="field">
+    <div class="field task-container">
       <div class="control has-icons-right">
         <label class="checkbox is-size-4">
           <input class="mr-3" type="checkbox" />
-          ${currentTask.taskContent}
+            <span>${currentTask.taskContent}</span>
         </label>
   
-        <span class="icon is-right">
+        <span class="delete-btn icon is-right">
           <ion-icon name="trash-outline"></ion-icon>
         </span>
       </div>
@@ -52,6 +68,11 @@ const renderData = (req) => {
 
       taskListEl.appendChild(liEl);
     });
+
+    // Because I'm creating all the delete buttons using .innerHTML, wait for the buttons to finish getting created/loaded to page
+    // AND THEN grab each delete button and attach event listener
+    // (this process can probably be made more efficient by attaching event listener at time of creation, but then I wouldn't be able to use .innerHTML. I'd have to manually create each node and populate each node with content)
+    addDeleteEvents();
   };
 
   req.onerror = (err) => {
@@ -119,5 +140,62 @@ const openIDB = () => {
     console.info('Successful database connection');
 
     renderData(getAllTasks(db));
+  };
+};
+
+const addTask = (newTask) => {
+  // open database connection
+  const taskDbRequest = window.indexedDB.open('TaskDB', 1);
+
+  taskDbRequest.onerror = () => {
+    console.error('Error loading database');
+  };
+
+  taskDbRequest.onsuccess = (event) => {
+    const db = event.target.result;
+
+    // Start a transaction and make a request to do some database operation, like adding or retrieving data.
+    const taskObjectStore = db
+      .transaction('taskStore', 'readwrite')
+      .objectStore('taskStore');
+
+    // Wait for the operation to complete by listening to the right kind of DOM event.
+    // Do something with the results (which can be found on the request object)
+    const req = taskObjectStore.add(newTask);
+
+    req.onsuccess = () => {
+      console.log(
+        `${JSON.stringify(
+          newTask,
+          null,
+          1
+        )} added to tasksObjectStore successfully`
+      );
+
+      renderData(getAllTasks(db));
+    };
+  };
+};
+
+const deleteTask = (taskId) => {
+  const taskDbRequest = window.indexedDB.open('TaskDB', 1);
+
+  taskDbRequest.onerror = () => {
+    console.error('Error loading database');
+  };
+
+  taskDbRequest.onsuccess = (event) => {
+    const db = event.target.result;
+    const taskObjectStore = db
+      .transaction('taskStore', 'readwrite')
+      .objectStore('taskStore');
+
+    const req = taskObjectStore.delete(Number(taskId));
+
+    req.onsuccess = () => {
+      console.log(`Task with matching ID: ${taskId} deleted successfully`);
+
+      renderData(getAllTasks(db));
+    };
   };
 };

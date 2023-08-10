@@ -80,6 +80,63 @@ const renderData = (req) => {
   };
 };
 
+const addTask = (newTask) => {
+  // open database connection
+  const taskDbRequest = window.indexedDB.open('TaskDB', 1);
+
+  taskDbRequest.onerror = () => {
+    console.error('Error loading database');
+  };
+
+  taskDbRequest.onsuccess = (event) => {
+    const db = event.target.result;
+
+    // Start a transaction and make a request to do some database operation, like adding or retrieving data.
+    const taskObjectStore = db
+      .transaction('taskStore', 'readwrite')
+      .objectStore('taskStore');
+
+    // Wait for the operation to complete by listening to the right kind of DOM event.
+    // Do something with the results (which can be found on the request object)
+    const req = taskObjectStore.add(newTask);
+
+    req.onsuccess = () => {
+      console.log(
+        `${JSON.stringify(
+          newTask,
+          null,
+          1
+        )} added to tasksObjectStore successfully`
+      );
+
+      renderData(getAllTasks(db));
+    };
+  };
+};
+
+const deleteTask = (taskId) => {
+  const taskDbRequest = window.indexedDB.open('TaskDB', 1);
+
+  taskDbRequest.onerror = () => {
+    console.error('Error loading database');
+  };
+
+  taskDbRequest.onsuccess = (event) => {
+    const db = event.target.result;
+    const taskObjectStore = db
+      .transaction('taskStore', 'readwrite')
+      .objectStore('taskStore');
+
+    const req = taskObjectStore.delete(Number(taskId));
+
+    req.onsuccess = () => {
+      console.log(`Task with matching ID: ${taskId} deleted successfully`);
+
+      renderData(getAllTasks(db));
+    };
+  };
+};
+
 const openIDB = () => {
   // IndexedDB Basic Pattern:
   // 1) Open a database.
@@ -137,65 +194,8 @@ const openIDB = () => {
   taskDbRequest.onsuccess = (event) => {
     const db = event.target.result;
 
-    console.info('Successful database connection');
+    console.info('Successful IDB database connection');
 
     renderData(getAllTasks(db));
-  };
-};
-
-const addTask = (newTask) => {
-  // open database connection
-  const taskDbRequest = window.indexedDB.open('TaskDB', 1);
-
-  taskDbRequest.onerror = () => {
-    console.error('Error loading database');
-  };
-
-  taskDbRequest.onsuccess = (event) => {
-    const db = event.target.result;
-
-    // Start a transaction and make a request to do some database operation, like adding or retrieving data.
-    const taskObjectStore = db
-      .transaction('taskStore', 'readwrite')
-      .objectStore('taskStore');
-
-    // Wait for the operation to complete by listening to the right kind of DOM event.
-    // Do something with the results (which can be found on the request object)
-    const req = taskObjectStore.add(newTask);
-
-    req.onsuccess = () => {
-      console.log(
-        `${JSON.stringify(
-          newTask,
-          null,
-          1
-        )} added to tasksObjectStore successfully`
-      );
-
-      renderData(getAllTasks(db));
-    };
-  };
-};
-
-const deleteTask = (taskId) => {
-  const taskDbRequest = window.indexedDB.open('TaskDB', 1);
-
-  taskDbRequest.onerror = () => {
-    console.error('Error loading database');
-  };
-
-  taskDbRequest.onsuccess = (event) => {
-    const db = event.target.result;
-    const taskObjectStore = db
-      .transaction('taskStore', 'readwrite')
-      .objectStore('taskStore');
-
-    const req = taskObjectStore.delete(Number(taskId));
-
-    req.onsuccess = () => {
-      console.log(`Task with matching ID: ${taskId} deleted successfully`);
-
-      renderData(getAllTasks(db));
-    };
   };
 };

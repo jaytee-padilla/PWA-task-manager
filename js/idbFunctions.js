@@ -52,15 +52,15 @@ const renderData = (req) => {
       liEl.setAttribute('data-task-id', currentTask.id);
 
       liEl.innerHTML = `
-    <div class="field task-container">
-      <div class="control has-icons-right">
+    <div class="field">
+      <div class="control task-container">
         <label class="checkbox is-size-4">
           <input class="mr-3" type="checkbox" />
             <span>${currentTask.taskContent}</span>
         </label>
   
-        <span class="delete-btn icon is-right">
-          <ion-icon name="trash-outline"></ion-icon>
+        <span class="material-icons delete-btn red">
+          delete_forever
         </span>
       </div>
     </div>

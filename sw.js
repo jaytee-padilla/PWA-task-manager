@@ -13,10 +13,12 @@ self.addEventListener('install', (event) => {
       '/',
       '/index.html',
       '/index.css',
-      'https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css',
       '/script.js',
       '/js/idbFunctions.js',
       '/js/taskSeeds.js',
+      'https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css',
+      'https://fonts.googleapis.com/icon?family=Material+Icons',
+      'https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2'
     ])
   );
 });

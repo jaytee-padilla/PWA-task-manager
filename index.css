@@ -19,4 +19,14 @@ input[type=checkbox] {
   /* This also enables the delete button's encompassing span to react to event listeners.
   Hopefully this doesn't get in the way of anything else */
   pointer-events: auto !important;
+  /* align-self: center; */
+}
+
+.task-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.material-icons.red {
+  color: red;
 }

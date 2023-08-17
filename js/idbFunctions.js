@@ -168,7 +168,7 @@ const openIDB = () => {
     let newVersion = event.newVersion || db.version;
     console.log(`DB updated from version ${oldVersion} to ${newVersion}`);
 
-    // if TaskDB object store already exists, delete it and create new one
+    // on version upgrade, if TaskDB object store already exists, delete it and create new one
     if (db.objectStoreNames.contains('tasks')) {
       db.deleteObjectStore('tasks');
     }

@@ -1,0 +1,31 @@
+{
+  "name": "PWA Task Manager",
+  "short_name": "PWA-TM",
+  "description": "A plain ol' task manager type app, except it's a PWA.",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/images/web/apple-touch-icon.png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/images/web/icon-192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/web/icon-512.png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/images/web/icon-192-maskable.png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/web/icon-512-maskable.png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "display": "standalone"
+}
